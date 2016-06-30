@@ -1,0 +1,275 @@
+#!/usr/bin/env php
+<?php
+// ********************************************************************************
+// PHP shell script to ease the setup and execution of make.wordpres.sorg patches
+// ********************************************************************************
+
+$INSTALL_FOLDER_NAME = 'wordpress-trunk';
+$PATCH_FILE_NAME = '_wpdo_downloaded.patch';
+
+
+// ********************************************************************************
+// Runner
+
+echo "Ⓦ  WPDO v0.1 for OSX 10.11\n\n";
+
+if ( $argv[1] ) {
+  run( $argv[1] );
+} else {
+  $commands = array(
+    's' => 'start',
+    'p' => 'patch',
+    'r' => 'revert',
+    'u' => 'update',
+    'x' => 'kill',
+  );
+
+  echo "Hi! Do you have a command for me?\n";
+  echo "\n";
+  foreach ( $commands as $key => $value ) {
+    echo "  ($key) $value\n";
+  }
+  echo "   ";
+  $opt = listen_char();
+  echo "\n\n";
+
+  run( $commands[ $opt ] );
+}
+
+function run( $command ) {
+  global $argv;
+
+  if ( function_exists( 'command_' . $command ) ) {
+    call_user_func_array( 'command_' . $command, $argv );
+    echo "\n";
+  }
+}
+
+
+// ********************************************************************************
+// Commands
+
+function command_start() {
+  global $INSTALL_FOLDER_NAME;
+  $install_done = true;
+
+  echo "Installing script... \n";
+  $install_done = $install_done & install_osx_script();
+
+  echo "Checking Apache... \n";
+  $install_done = $install_done & install_osx_apache();
+
+  echo "Checking MySQL... \n";
+  $install_done = $install_done & install_osx_mysql();
+
+  echo "Checking SVN... \n";
+  $install_done = $install_done & install_osx_svn();
+
+  echo "Checking WordPress... \n";
+  $install_done = $install_done & install_osx_wordpress( $INSTALL_FOLDER_NAME );
+
+  // Launch!
+  if ( $install_done == true ) {
+    run_servers();
+  }
+}
+
+function command_kill() {
+  global $INSTALL_FOLDER_NAME;
+  echo "Uninstalling '$INSTALL_FOLDER_NAME'...\n";
+
+  if ( file_exists( $INSTALL_FOLDER_NAME . '/wp-blog-header.php' ) ) {
+    exec_simple(
+      'rm -rf ' . $INSTALL_FOLDER_NAME,
+      'Uninstall complete',
+      'Uninstall failed'
+    );
+  } else {
+    echo "           * Nothing to uninstall. All already clear.";
+  }
+}
+
+function command_revert() {
+  echo "Reverting to original...\n";
+
+  // Remove patch if present
+  if ( file_exists( $PATCH_FILE_NAME ) ) {
+    $ret = exec_simple(
+      'rm $PATCH_FILE_NAME',
+      'Patch cleared',
+      'Failing removing patch'
+    );
+  }
+
+  // Revert SVN
+  $ret = exec_simple(
+    'svn revert -R .',
+    'WordPress TRUNK reverted to original',
+    'WordPress TRUNK revert failed. Please reinstall'
+  );
+
+  if ( $ret ) {
+    @exec( 'svn info | grep Revision\:', $exec_output_array, $exec_return );
+    echo "             " . $exec_output_array[0];
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function command_update() {
+  echo "Updating trunk...\n";
+
+  $ret = exec_simple(
+    'svn up',
+    'WordPress TRUNK updated to latest version',
+    'WordPress TRUNK update failed'
+  );
+
+  if ( $ret ) {
+    @exec( 'svn info | grep Revision\:', $exec_output_array, $exec_return );
+    echo "             " . $exec_output_array[0];
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function command_patch() {
+  global $argv, $PATCH_FILE_NAME;
+
+  if ( $argv[2] ) {
+    // Path should be:
+    // https://core.trac.wordpress.org/raw-attachment/ticket/00000/00000.diff
+    $url = $argv[2];
+    if ( preg_match( '/^[0-9]+$/', $url ) ) {
+      $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$url/$url.diff";
+      echo $url . "\n";
+    }
+    $url = preg_replace( '/\/attachment/', '/raw-attachment', $url );
+    echo "Installing patch...\n";
+
+    if ( exec_simple( 'curl -o ' . $PATCH_FILE_NAME . ' ' . $url . ' 2>&1', 'Download complete', 'Download failed' ) ) {
+      exec_simple(
+        'patch -p0 < ' . $PATCH_FILE_NAME,
+        'Patch succeeded',
+        'Patch failed'
+      );
+    }
+  } else {
+    echo "No patch to install. Please execute on command line: wpdo patch [URL]";
+  }
+}
+
+function command_prepare() {
+  echo "#TODO: prepare patch for upload.";
+  // svn diff > 00000.patch
+}
+
+
+// ********************************************************************************
+// Support functions
+
+function install_osx_script() {
+  echo "           # TODO: install in bin or equivalent\n";
+  return true;
+}
+
+function install_osx_apache() {
+  return exec_simple(
+    'httpd -v 2>&1 2>&1',
+    'Apache already installed',
+    'Needs to install Apache'
+  );
+}
+
+function install_osx_mysql() {
+  return exec_simple(
+    'mysql --version 2>&1',
+    'MySQL already installed',
+    'You need to install MySQL: http://dev.mysql.com/downloads/'
+  );
+}
+
+function install_osx_svn() {
+  return exec_simple(
+    'svn --version 2>&1',
+    'SVN already installed',
+    'You need to install SVN'
+  );
+}
+
+function install_osx_wordpress( $install_path ) {
+  // Requires SVN
+  @exec( 'svn --version 2>&1', $exec_output_array, $exec_return );
+  if ( $exec_return == 0 ) {
+    // Safety check from inside existing WP
+    if ( file_exists( './wp-blog-header.php' ) ) {
+      echo "           - You're already inside a WordPress installation. Skipping.\n";
+      return true;
+    }
+
+    // Create folder if it doesn't exist
+    if ( !file_exists( $install_path ) ) {
+      echo "           + Folder '" . $install_path . "' created.\n";
+      mkdir( $install_path, 0777, true );
+    }
+
+    // Install WP from SVN
+    if ( !file_exists( $install_path . '/wp-blog-header.php' ) ) {
+      echo "           > Downloading WordPress TRUNK.\n";
+      return exec_simple( 'svn co https://core.svn.wordpress.org/trunk/ ' . $install_path, 'Download complete', 'Download failed' );
+    } else {
+      echo "           + WordPress already installed at '" . $install_path . "'.\n";
+      return true;
+    }
+  }
+}
+
+function run_servers() {
+  echo "Starting servers... \n";
+  $ret = exec_simple(
+    'sudo apachectl start 2>&1',
+    'Apache running',
+    'Apache failed'
+  );
+
+  if ( $ret ) {
+    $url = 'http://localhost/';
+    exec_simple(
+      'open ' . $url,
+      'Opened ' . $url . ' in your browser',
+      'Failed to open ' . $url . ' in your browser'
+    );
+  }
+}
+
+
+// ********************************************************************************
+// Tools
+
+function listen_char() {
+  readline_callback_handler_install('', function() { });
+  while (true) {
+    $r = array(STDIN);
+    $w = NULL;
+    $e = NULL;
+    $n = stream_select($r, $w, $e, null);
+    if ($n && in_array(STDIN, $r)) {
+      $c = stream_get_contents(STDIN, 1);
+      echo $c;
+      return $c;
+    }
+  }
+}
+
+function exec_simple( $bash_command, $msg_ok = 'Ok', $msg_no = 'Nope' ) {
+  @exec( $bash_command, $exec_output_array, $exec_return );
+  if ( $exec_return == 0 ) {
+    echo "           + $msg_ok\n";
+    return true;
+  } else {
+    echo "           - $msg_no\n";
+    return false;
+  }
+}
