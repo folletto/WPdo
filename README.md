@@ -11,6 +11,7 @@ WHAT IS WPDO
 Starting from scratch in contributing to Make WordPress is challenging, expecially for non-developers.
 This tool, while still a command line tool, is meant to simplify how people can interact with the technical side of things, from setup to patches.
 
+If you just need support for patches and you're comfortable with Grunt, you might want to check [grunt-patch-wordpress](https://www.npmjs.com/package/grunt-patch-wordpress).
 
 WHAT DOES IT DO
 ---------------
