@@ -46,5 +46,5 @@ LICENSE
 
 > _I've got some gift for languages.  
   You follow your gift.  
-  But Latin's not easy._
+  But Latin's not easy._  
   – Ursula K. Le Guin
