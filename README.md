@@ -20,14 +20,29 @@ WHAT DOES IT DO
 * Helps applying and clearing patches easily
 
 
-USAGE
------
+INSTALLATION
+------------
 
 1. Download `wpdo`
 2. Install it in `bin` so it's globally available, or put it in the directory you're going to work
 3. Make it executable
 4. Run it from Terminal: `./wpdo`
 
+
+USAGE
+-----
+
+* `wpdo start`  
+  This command checks if everything is installed correctly and helps with setup.  
+  Also installs WordPress TRUNK to _wordpress-trunk_ subdirectory.
+* `wpdo patch [number]`  
+  Just type the patch number or URL and it applies the patch to the WordPress in the current directory.
+* `wpdo revert`  
+  Restores the local WordPress folder you're in to its original state.
+* `wpdo update`  
+  Updates the local WordPress folder you're in to the latest revision.
+* `wpdo kill`  
+  Removes the WordPress sub-folder named _wordpress-trunk_.
 
 
 CHANGELOG
