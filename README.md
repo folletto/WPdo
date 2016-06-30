@@ -23,10 +23,10 @@ WHAT DOES IT DO
 INSTALLATION
 ------------
 
-1. Download `wpdo`
-2. Install it in `bin` so it's globally available, or put it in the directory you're going to work
-3. Make it executable
-4. Run it from Terminal: `./wpdo`
+1. Download `wpdo`.
+2. Copy it in `/usr/local/bin` so it's globally available.
+3. Make it executable.
+4. Run it from Terminal: `wpdo`.
 
 
 USAGE
