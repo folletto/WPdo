@@ -23,9 +23,9 @@ WHAT DOES IT DO
 INSTALLATION
 ------------
 
-1. Download `wpdo`.
+1. Download `wpdo`: https://raw.githubusercontent.com/folletto/WPdo/master/wpdo
 2. Copy it in `/usr/local/bin` so it's globally available.
-3. Make it executable.
+3. Make it executable: `chmod +x /usr/local/bin/wpdo`.
 4. Run it from Terminal: `wpdo`.
 
 
