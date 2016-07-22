@@ -54,9 +54,6 @@ function command_start() {
   global $INSTALL_FOLDER_NAME;
   $install_done = true;
 
-  echo "Installing script... \n";
-  $install_done = $install_done & install_osx_script();
-
   echo "Checking Apache... \n";
   $install_done = $install_done & install_osx_apache();
 
@@ -205,11 +202,6 @@ function command_uninstall() {
 
 // ********************************************************************************
 // Support functions
-
-function install_osx_script() {
-  echo "           # TODO: install in bin or equivalent\n";
-  return true;
-}
 
 function install_osx_apache() {
   return exec_simple(
