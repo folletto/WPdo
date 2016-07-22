@@ -189,7 +189,7 @@ function command_install() {
           }
 
           // Extra cleanup
-          if ( ( basename( __FILE__ ) != $SYSTEM_INSTALLED_NAME ) && unlink( __FILE__ ) ) {
+          if ( ( basename( __FILE__ ) == $SYSTEM_INSTALLED_NAME ) || unlink( __FILE__ ) ) {
             echo "Unable to delete after installation '" . __FILE__ . "'\n";
           }
         } else {
