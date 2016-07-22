@@ -58,9 +58,9 @@ USAGE
 CHANGELOG
 ---------
 
-* **0.1** (26/06/2016)
-  * First version.
-  * Made at WordCamp Europe Contributors Day 2016
+* **0.2** (22/07/2016)
+  * Added install/uninstall commands.
+  * Now remote installation with `curl` works.
 * **0.1** (26/06/2016)
   * First version.
   * Made at WordCamp Europe Contributors Day 2016
