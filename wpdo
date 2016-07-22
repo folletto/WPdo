@@ -4,7 +4,8 @@
 // PHP shell script to ease the setup and execution of make.wordpres.sorg patches
 // ********************************************************************************
 
-$SYSTEM_INSTALL_PATH = '/usr/local/bin/wpdo';
+$SYSTEM_INSTALLED_NAME = 'wpdo';
+$SYSTEM_INSTALL_PATH = '/usr/local/bin/' . $SYSTEM_INSTALLED_NAME;
 $INSTALL_FOLDER_NAME = 'wordpress-trunk';
 $PATCH_FILE_NAME = '_wpdo_downloaded.patch';
 
@@ -169,6 +170,7 @@ function command_prepare() {
 // Script Installation
 
 function command_install() {
+  global $SYSTEM_INSTALLED_NAME;
   global $SYSTEM_INSTALL_PATH;
 
   if ( __FILE__ != $SYSTEM_INSTALL_PATH ) {
@@ -179,7 +181,7 @@ function command_install() {
       if ( copy( __FILE__, $SYSTEM_INSTALL_PATH ) ) {
         if ( chmod( $SYSTEM_INSTALL_PATH, 0755 ) ) {
           echo "Script installed.\n";
-          if ( unlink( __FILE__ ) ) {
+          if ( ( basename( __FILE__ ) == $SYSTEM_INSTALLED_NAME ) || unlink( __FILE__ ) ) {
             // Technically already succeeded.
           } else {
             echo "Unable to delete after installation '" . __FILE__ . "'\n";
