@@ -245,7 +245,7 @@ function install_osx_svn() {
   return exec_simple(
     'svn --version 2>&1',
     'SVN installed',
-    'You need to install SVN'
+    'You need to install SVN. Install XCode from the Mac App Store (big) then run `xcode-select --install`.'
   );
 }
 
