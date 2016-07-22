@@ -4,6 +4,7 @@
 // PHP shell script to ease the setup and execution of make.wordpres.sorg patches
 // ********************************************************************************
 
+$SYSTEM_INSTALL_PATH = '/usr/local/bin/wpdo';
 $INSTALL_FOLDER_NAME = 'wordpress-trunk';
 $PATCH_FILE_NAME = '_wpdo_downloaded.patch';
 
@@ -164,6 +165,41 @@ function command_patch() {
 function command_prepare() {
   echo "#TODO: prepare patch for upload.";
   // svn diff > 00000.patch
+}
+
+
+// ********************************************************************************
+// Script Installation
+
+function command_install() {
+  global $SYSTEM_INSTALL_PATH;
+
+  if ( file_exists( $SYSTEM_INSTALL_PATH ) ) {
+    echo "File already exists at '" . $SYSTEM_INSTALL_PATH ."'\n";
+    echo "The file shouldn't be present for this script to continue.\n";
+  } else {
+    if ( copy( __FILE__, $SYSTEM_INSTALL_PATH ) ) {
+      if ( chmod( $SYSTEM_INSTALL_PATH, 0755 ) ) {
+        echo "Script installed.\n";
+      } else {
+        echo "Script was copied to '" . $SYSTEM_INSTALL_PATH . "'\n";
+        echo "However it wasn't possible to set it executable.\n";
+      }
+    } else {
+      echo "Unable to install script to '" . $SYSTEM_INSTALL_PATH ."'\n";
+      echo "Check if path exists and try again.\n";
+    }
+  }
+}
+
+function command_uninstall() {
+  global $SYSTEM_INSTALL_PATH;
+
+  if ( unlink( $SYSTEM_INSTALL_PATH ) ) {
+    echo "Script fully uninstalled.\n";
+  } else {
+    echo "Unable to uninstall '" . $SYSTEM_INSTALL_PATH . "'\n";
+  }
 }
 
 
