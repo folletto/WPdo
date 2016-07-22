@@ -24,11 +24,20 @@ WHAT DOES IT DO
 INSTALLATION
 ------------
 
+Fast:
+
+1. Open Terminal
+2. Run `curl -s https://raw.githubusercontent.com/folletto/WPdo/master/wpdo -o wpdo.php && php wpdo.php install`
+3. Done! Now you can use `wpdo` from Terminal.
+
+Manual:
+
 1. Download `wpdo`: https://raw.githubusercontent.com/folletto/WPdo/master/wpdo
 2. Copy it in `/usr/local/bin` so it's globally available.
 3. Make it executable: `chmod +x /usr/local/bin/wpdo`.
-4. Run it from Terminal: `wpdo`.
+4. Done! Now you can use `wpdo` from Terminal.
 
+Public WPdo website [here](https://folletto.github.io/WPdo/).
 
 USAGE
 -----
@@ -49,6 +58,9 @@ USAGE
 CHANGELOG
 ---------
 
+* **0.1** (26/06/2016)
+  * First version.
+  * Made at WordCamp Europe Contributors Day 2016
 * **0.1** (26/06/2016)
   * First version.
   * Made at WordCamp Europe Contributors Day 2016
