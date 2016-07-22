@@ -75,16 +75,21 @@ function command_start() {
 
 function command_kill() {
   global $INSTALL_FOLDER_NAME;
-  echo "Uninstalling '$INSTALL_FOLDER_NAME'...\n";
 
-  if ( file_exists( $INSTALL_FOLDER_NAME . '/wp-blog-header.php' ) ) {
-    exec_simple(
-      'rm -rf ' . $INSTALL_FOLDER_NAME,
-      'Uninstall complete',
-      'Uninstall failed'
-    );
+  if ( file_exists( 'wp-blog-header.php' ) ) {
+    echo "To uninstall, go in the '" . $INSTALL_FOLDER_NAME . "' parent directory first.";
   } else {
-    echo "           * Nothing to uninstall. All already clear.";
+    echo "Uninstalling '$INSTALL_FOLDER_NAME'...\n";
+
+    if ( file_exists( $INSTALL_FOLDER_NAME . '/wp-blog-header.php' ) ) {
+      exec_simple(
+        'rm -rf ' . $INSTALL_FOLDER_NAME,
+        'Uninstall complete',
+        'Uninstall failed'
+      );
+    } else {
+      echo "           * Nothing to uninstall. All already clear.";
+    }
   }
 }
 
@@ -223,7 +228,7 @@ function command_uninstall() {
 function install_osx_apache() {
   return exec_simple(
     'httpd -v 2>&1 2>&1',
-    'Apache already installed',
+    'Apache installed',
     'Needs to install Apache'
   );
 }
@@ -231,7 +236,7 @@ function install_osx_apache() {
 function install_osx_mysql() {
   return exec_simple(
     'mysql --version 2>&1',
-    'MySQL already installed',
+    'MySQL installed',
     'You need to install MySQL: http://dev.mysql.com/downloads/'
   );
 }
@@ -239,7 +244,7 @@ function install_osx_mysql() {
 function install_osx_svn() {
   return exec_simple(
     'svn --version 2>&1',
-    'SVN already installed',
+    'SVN installed',
     'You need to install SVN'
   );
 }
