@@ -1,7 +1,7 @@
 WPdo - Simple Make WordPress in Bash
 ====================================
 
-**Simple command line tool to install WordPress TRUNK and patches from make.wordpress.com**  
+**Simple command line tool to install WordPress TRUNK and patches from make.wordpress.org**  
 <https://make.wordpress.org/>
 
 
