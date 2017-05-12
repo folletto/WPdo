@@ -181,7 +181,7 @@ function command_patch() {
 
     // If parameter is Trac attachment page
     // i.e. https://core.trac.wordpress.org/attachment/ticket/00000/00000.2.diff
-    if ( preg_match( '#^https://core\.trac\.wordpress\.org/attachment/ticket/([0-9]+)/([^.]+)\.diff$#', $url, $matches ) ) {
+    if ( preg_match( '#^https://core\.trac\.wordpress\.org/attachment/ticket/([0-9]+)/(.+)\.diff$#', $url, $matches ) ) {
       $ticket_number = $matches[1];
       $patch_file = $matches[2];
       $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$ticket_number/$patch_file.diff";
