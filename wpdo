@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 // ********************************************************************************
-// PHP shell script to ease the setup and execution of make.wordpres.sorg patches
+// PHP shell script to ease the setup and execution of make.wordpress.org patches
 // ********************************************************************************
 
 $SYSTEM_INSTALLED_NAME = 'wpdo';
