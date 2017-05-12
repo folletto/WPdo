@@ -146,12 +146,38 @@ function command_patch() {
     // Path should be:
     // https://core.trac.wordpress.org/raw-attachment/ticket/00000/00000.diff
     $url = $argv[2];
-    if ( preg_match( '/^[0-9]+$/', $url ) ) {
-      $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$url/$url.diff";
-      echo $url . "\n";
+    $ticket_number = '';
+    $patch_file = '';
+    $matches = [];
+
+    // If parameter is just the ticket number
+    // i.e. 00000 or 00000.2
+    if ( preg_match( '#^([0-9]+)(\.([0-9]+))?$#', $url, $match ) ) {
+      $ticket_number = $match[1];
+      $patch_file = $ticket_number;
+      if ( sizeof( $matches ) >= 4 ) $patch_file += '.' . $matches[3];
+      $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$ticket_number/$patch_file.diff";
     }
-    $url = preg_replace( '/\/attachment/', '/raw-attachment', $url );
-    echo "Installing patch...\n";
+
+    // If parameter is the full URL of the ticket
+    // i.e. https://core.trac.wordpress.org/ticket/00000
+    if ( preg_match( '#^https://core\.trac\.wordpress\.org/ticket/([0-9]+)#', $url, $matches ) ) {
+      $ticket_number = $matches[1];
+      $patch_file = $ticket_number; // Defaults to the first one, as we can't know from the base URL
+      $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$ticket_number/$patch_file.diff";
+    }
+
+    // If parameter is Trac attachment page
+    // i.e. https://core.trac.wordpress.org/attachment/ticket/00000/00000.2.diff
+    if ( preg_match( '#^https://core\.trac\.wordpress\.org/attachment/ticket/([0-9]+)/[0-9]+(\.([0-9]+))?\.diff$#', $url, $matches ) ) {
+      $ticket_number = $matches[1];
+      $patch_file = $ticket_number;
+      if ( sizeof( $matches ) >= 4 ) $patch_file += '.' . $matches[3];
+      $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$ticket_number/$patch_file.diff";
+    }
+
+    echo "Retrieving patch '$ticket_number/$patch_file.diff'...\n";
+    echo "$url\n";
 
     if ( exec_simple( 'curl -o ' . $PATCH_FILE_NAME . ' ' . $url . ' 2>&1', 'Download complete', 'Download failed' ) ) {
       exec_simple(
