@@ -195,7 +195,7 @@ function command_patch() {
         }
       } else {
         echo "\n";
-        echo "To see the error, try to run: patch -p$path_level <_wpdo_downloaded.patch";
+        echo "To see the error, try to run: patch -p$path_level <$PATCH_FILE_NAME";
       }
     }
   } else {
