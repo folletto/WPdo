@@ -63,10 +63,13 @@ To update uninstall with `wpdo uninstall` then run the installation again.
 CHANGELOG
 ---------
 
-* **0.2.1** (2017-05-12)
+* **0.3** (2017-05-12)
+  * Revert command now detects and asks to revert untracked files (#8).
+  * Detection of `src/` path to switch from `patch -p0` to `patch -p1` (#11).
   * Better URL detection for patches.
-  * Detection of `src/` path to switch from `patch -p0` to `patch -p1`
   * Display of changed files after successful patch.
+  * Better error message if patch fail.
+  * Various fixes.
 * **0.2** (2016-07-22)
   * Added install/uninstall commands.
   * Now remote installation with `curl` works.
