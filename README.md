@@ -54,6 +54,11 @@ USAGE
 * `wpdo kill`  
   Removes the WordPress sub-folder named _wordpress-trunk_.
 
+UPDATE
+------
+
+To update uninstall with `wpdo uninstall` then run the installation again.
+
 
 CHANGELOG
 ---------
