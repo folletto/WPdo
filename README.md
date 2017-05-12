@@ -58,10 +58,14 @@ USAGE
 CHANGELOG
 ---------
 
-* **0.2** (22/07/2016)
+* **0.2.1** (2017-05-12)
+  * Better URL detection for patches.
+  * Detection of `src/` path to switch from `patch -p0` to `patch -p1`
+  * Display of changed files after successful patch.
+* **0.2** (2016-07-22)
   * Added install/uninstall commands.
   * Now remote installation with `curl` works.
-* **0.1** (26/06/2016)
+* **0.1** (2016-06-26)
   * First version.
   * Made at WordCamp Europe Contributors Day 2016
 
@@ -69,7 +73,7 @@ CHANGELOG
 LICENSE
 -------
 
-  _Copyright (C) 2016, Davide Casali_  
+  _Copyright (C) 2016-2017, Davide Casali_  
   _Licensed under **GPLv3 License**_
 
 > _I've got some gift for languages.  
