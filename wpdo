@@ -189,12 +189,7 @@ function command_patch() {
 
       if ( exec_simple( 'patch -p' . $path_level . ' < ' . $PATCH_FILE_NAME, 'Patch succeeded', 'Patch failed' ) ) {
         // Let's show which files were changed
-        @exec( 'svn status', $exec_output_array, $exec_return );
-        foreach ( $exec_output_array as $line ) {
-          if ( preg_match( '#[ADMRC?!~]+\s{2,7}#', $line ) && ( strpos( $line, '_wpdo_downloaded.patch' ) === false ) ) {
-            echo "$line\n";
-          }
-        }
+        echo get_modified_files();
       } else {
         echo "\n";
         echo "To see the error, try to run: patch -p$path_level <$PATCH_FILE_NAME";
@@ -332,6 +327,18 @@ function run_servers() {
       'Failed to open ' . $url . ' in your browser'
     );
   }
+}
+
+function get_modified_files( $filter_flags = 'ADMRC?!~' ) {
+  $out = "";
+  @exec( 'svn status', $exec_output_array, $exec_return );
+  foreach ( $exec_output_array as $line ) {
+    if ( preg_match( '#[' . $filter_flags . ']+\s{2,7}#', $line ) && ( strpos( $line, '_wpdo_downloaded.patch' ) === false ) ) {
+      $out .= "$line\n";
+    }
+  }
+
+  return $out;
 }
 
 
