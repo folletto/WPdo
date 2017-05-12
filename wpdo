@@ -179,11 +179,24 @@ function command_patch() {
     echo "$url\n";
 
     if ( exec_simple( 'curl -o ' . $PATCH_FILE_NAME . ' ' . $url . ' 2>&1', 'Download complete', 'Download failed' ) ) {
-      exec_simple(
-        'patch -p0 < ' . $PATCH_FILE_NAME,
-        'Patch succeeded',
-        'Patch failed'
-      );
+      // Detect if patch is from develop repository (with 'src/') or normal core repository
+      $path_level = '0';
+      if( strpos( file_get_contents( $PATCH_FILE_NAME ), '+++ src/') !== false ) {
+        $path_level = '1';
+      }
+
+      if ( exec_simple( 'patch -p' . $path_level . ' < ' . $PATCH_FILE_NAME, 'Patch succeeded', 'Patch failed' ) ) {
+        // Let's show which files were changed
+        @exec( 'svn status', $exec_output_array, $exec_return );
+        foreach ( $exec_output_array as $line ) {
+          if ( preg_match( '#[ADMRC?!~]+\s{2,7}#', $line ) && ( strpos( $line, '_wpdo_downloaded.patch' ) === false ) ) {
+            echo "$line\n";
+          }
+        }
+      } else {
+        echo "\n";
+        echo "To see the error, try to run: patch -p$path_level <_wpdo_downloaded.patch";
+      }
     }
   } else {
     echo "No patch to install. Please execute on command line: wpdo patch [URL]";
