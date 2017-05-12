@@ -94,12 +94,14 @@ function command_kill() {
 }
 
 function command_revert() {
+  global $PATCH_FILE_NAME;
+
   echo "Reverting to original...\n";
 
   // Remove patch if present
   if ( file_exists( $PATCH_FILE_NAME ) ) {
-    $ret = exec_simple(
-      'rm $PATCH_FILE_NAME',
+    @exec_simple(
+      'rm ' . $PATCH_FILE_NAME,
       'Patch cleared',
       'Failing removing patch'
     );
