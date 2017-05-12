@@ -108,19 +108,29 @@ function command_revert() {
   }
 
   // Revert SVN
-  $ret = exec_simple(
-    'svn revert -R .',
-    'WordPress TRUNK reverted to original',
-    'WordPress TRUNK revert failed. Please reinstall'
-  );
-
-  if ( $ret ) {
+  if ( exec_simple( 'svn revert -R .', 'WordPress TRUNK reverted to original', 'WordPress TRUNK revert failed, please reinstall (kill+start)' ) ) {
     @exec( 'svn info | grep Revision\:', $exec_output_array, $exec_return );
     echo "        " . $exec_output_array[0];
-    return true;
-  } else {
-    return false;
+    echo "\n";
+
+    // Ask for unversioned files
+    $unversioned_files = get_modified_files( '?' );
+    if ( ! ($unversioned_files === "") ) {
+      echo "\nDetected these unversioned files:\n";
+      echo $unversioned_files;
+      echo "  (y) to cleanup unversioned files, press any other key to keep them\n   ";
+      $opt = listen_char();
+      echo "\n";
+      if ( $opt == 'y' ) {
+        if ( exec_simple( 'svn cleanup --remove-unversioned', 'Removed unversioned files (marked with "?")', 'Failed to remove unversioned files' ) ) {
+          return true;
+        }
+      }
+    } else {
+      return true;
+    }
   }
+  return false;
 }
 
 function command_update() {
