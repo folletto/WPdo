@@ -13,7 +13,7 @@ $PATCH_FILE_NAME = '_wpdo_downloaded.patch';
 // ********************************************************************************
 // Runner
 
-echo "Ⓦ  WPDO v0.2 for OSX 10.11\n\n";
+echo "Ⓦ  WPDO v0.2.1 for OSX 10.11\n\n";
 
 $COMMANDS_INFO = array(
   's' => 'start',
