@@ -152,8 +152,8 @@ function command_patch() {
 
     // If parameter is just the ticket number
     // i.e. 00000 or 00000.2
-    if ( preg_match( '#^([0-9]+)(\.([0-9]+))?$#', $url, $match ) ) {
-      $ticket_number = $match[1];
+    if ( preg_match( '#^([0-9]+)(\.([0-9]+))?$#', $url, $matches ) ) {
+      $ticket_number = $matches[1];
       $patch_file = $ticket_number;
       if ( sizeof( $matches ) >= 4 ) $patch_file += '.' . $matches[3];
       $url = "https://core.trac.wordpress.org/raw-attachment/ticket/$ticket_number/$patch_file.diff";
