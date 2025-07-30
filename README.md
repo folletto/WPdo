@@ -81,7 +81,7 @@ CHANGELOG
 LICENSE
 -------
 
-  _Copyright (C) 2016-2017, Davide Casali_  
+  _Copyright (C) 2016-2017, Erin Casali_  
   _Licensed under **GPLv3 License**_
 
 > _I've got some gift for languages.  
